@@ -24,6 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Project> projects = Provider.of<List<Project>>(context);
+    List<Task> todaysTasks = Provider.of<List<Task>>(context);
     User user = Provider.of<User>(context);
     final screenSize = MediaQuery.of(context).size;
 
@@ -246,9 +247,12 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                'Today',
-                                style: Theme.of(context).textTheme.title,
+                              Visibility(
+                                visible: todaysTasks.isNotEmpty,
+                                child: Text(
+                                  'Today',
+                                  style: Theme.of(context).textTheme.title,
+                                ),
                               ),
                               TaskList(),
                             ],

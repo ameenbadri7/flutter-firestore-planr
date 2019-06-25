@@ -37,9 +37,12 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   @override
   void dispose() {
+    // TODO: Extract this condition
     if (title.isNotEmpty &&
         ((title != widget.task.title) ||
-            (dueDate.compareTo(widget.task.dueDate) != 0) ||
+            (dueDate != null && widget.task.dueDate == null) ||
+            (widget.task.dueDate != null &&
+                !(dueDate.isAtSameMomentAs(widget.task.dueDate))) ||
             note != widget.task.note)) {
       print('updating');
       db.updateTask(widget.task, title: title, dueDate: dueDate, note: note);
