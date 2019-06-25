@@ -61,7 +61,10 @@ class _AuthScreenState extends State<AuthScreen> {
     if (user != null)
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return HomeScreen();
+        return StreamProvider<List<Task>>.value(
+          value: db.getAllTasksDueToday(user),
+          child: HomeScreen(),
+        );
       }));
   }
 
@@ -75,7 +78,10 @@ class _AuthScreenState extends State<AuthScreen> {
           displayName: _displayNameEditingController.text);
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return HomeScreen();
+        return StreamProvider<List<Task>>.value(
+          value: db.getAllTasksDueToday(user),
+          child: HomeScreen(),
+        );
       }));
     }
   }
