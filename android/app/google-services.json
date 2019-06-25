@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1089170800127",
+    "firebase_url": "https://task-manager-bce0f.firebaseio.com",
+    "project_id": "task-manager-bce0f",
+    "storage_bucket": "task-manager-bce0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089170800127:android:77b5cbb2713fcd91",
+        "android_client_info": {
+          "package_name": "com.fremfi.planr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089170800127-l03rscoihlq2r5paet7gb0p2p99u4qp7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc6pS1wGzNVVnIO3n-o7CwwggvgzS00Ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089170800127-l03rscoihlq2r5paet7gb0p2p99u4qp7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1089170800127-pqk763p287j129shdhjrl57gvg9bbc86.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fremfi.planr"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1089170800127-pqk763p287j129shdhjrl57gvg9bbc86.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1089170800127-pqk763p287j129shdhjrl57gvg9bbc86</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBuCDzszt2i9MH6bi7B4Ru_-D-OFDDqRI8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1089170800127</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fremfi.planr</string>
+	<key>PROJECT_ID</key>
+	<string>task-manager-bce0f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>task-manager-bce0f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1089170800127:ios:77b5cbb2713fcd91</string>
+	<key>DATABASE_URL</key>
+	<string>https://task-manager-bce0f.firebaseio.com</string>
+</dict>
+</plist>
