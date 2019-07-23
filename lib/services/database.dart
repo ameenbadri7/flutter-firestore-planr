@@ -138,12 +138,19 @@ class Database {
         .add(task.toDocument());
   }
 
-  Future<void> updateTask(Task task,
-      {String title, String note, bool completed, DateTime dueDate}) {
+  Future<void> updateTask(
+    Task task, {
+    String title,
+    String note,
+    bool completed,
+    DateTime dueDate,
+    DateTime reminder,
+  }) {
     task.title = title ?? task.title;
     task.note = note ?? task.note;
     task.completed = completed ?? task.completed;
     task.dueDate = dueDate ?? task.dueDate;
+    task.reminder = reminder ?? task.reminder;
     return _firestore
         .collection('projects')
         .document(task.projectId)

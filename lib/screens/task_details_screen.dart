@@ -2,6 +2,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 import '../components/editable_text_field.dart';
@@ -24,12 +26,14 @@ class TaskDetailsScreen extends StatefulWidget {
 class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   final Database db = Database();
   String title = '';
+  DateTime reminder;
   DateTime dueDate;
   String note = '';
 
   @override
   void initState() {
     title = widget.task.title;
+    reminder = widget.task.reminder;
     dueDate = widget.task.dueDate;
     note = widget.task.note;
     super.initState();
@@ -43,9 +47,12 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             (dueDate != null && widget.task.dueDate == null) ||
             (widget.task.dueDate != null &&
                 !(dueDate.isAtSameMomentAs(widget.task.dueDate))) ||
+            (reminder != null && widget.task.reminder == null) ||
+            (widget.task.reminder != null &&
+                !(reminder.isAtSameMomentAs(widget.task.reminder))) ||
             note != widget.task.note)) {
-      print('updating');
-      db.updateTask(widget.task, title: title, dueDate: dueDate, note: note);
+      db.updateTask(widget.task,
+          title: title, dueDate: dueDate, reminder: reminder, note: note);
     }
     super.dispose();
   }
@@ -62,6 +69,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        Provider.of<FlutterLocalNotificationsPlugin>(context);
     return SingleChildScrollView(
       child: Container(
 //        height: 500,
@@ -81,9 +90,45 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               },
               style: Theme.of(context).textTheme.title,
             ),
-            ListTile(
-              leading: Icon(Icons.alarm),
-              title: Text('Remind me'),
+            InkWell(
+              onTap: () {
+                DatePicker.showDatePicker(
+                  context,
+                  currentTime: reminder,
+                  theme: DatePickerTheme(
+                    doneStyle: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                  onConfirm: (DateTime selectedDate) async {
+                    setState(() {
+                      reminder = selectedDate;
+                    });
+                    // TODO: Fix Android Reminders
+                    var scheduledNotificationDateTime = reminder;
+                    var androidPlatformChannelSpecifics =
+                        AndroidNotificationDetails(
+                            'your other channel id',
+                            'your other channel name',
+                            'your other channel description');
+                    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+                    NotificationDetails platformChannelSpecifics =
+                        NotificationDetails(androidPlatformChannelSpecifics,
+                            iOSPlatformChannelSpecifics);
+                    await flutterLocalNotificationsPlugin.schedule(
+                        0,
+                        '$title',
+                        'Lets get to working',
+                        scheduledNotificationDateTime,
+                        platformChannelSpecifics,
+                        androidAllowWhileIdle: true);
+                  },
+                );
+              },
+              child: ListTile(
+                leading: Icon(Icons.alarm),
+                title: Text(reminder != null
+                    ? '${Moment.now().from(reminder)}'
+                    : 'Remind me'),
+              ),
             ),
             Divider(),
             InkWell(

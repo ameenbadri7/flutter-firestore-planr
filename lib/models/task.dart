@@ -7,6 +7,7 @@ class Task {
     this.title,
     this.note = '',
     this.completed = false,
+    this.reminder,
     this.dueDate,
     this.createdBy,
   });
@@ -16,6 +17,7 @@ class Task {
   String title;
   String note;
   String createdBy;
+  DateTime reminder;
   DateTime dueDate;
   bool completed;
 
@@ -24,6 +26,7 @@ class Task {
         projectId = other.projectId,
         title = other.title,
         completed = other.completed,
+        reminder = other.reminder,
         dueDate = other.dueDate,
         createdBy = other.createdBy,
         note = other.note;
@@ -33,6 +36,7 @@ class Task {
         projectId = projectId,
         title = doc['title'],
         completed = doc['completed'],
+        reminder = doc['reminder']?.toDate(),
         dueDate = doc['dueDate']?.toDate(),
         createdBy = doc['createdBy'],
         note = doc['note'];
@@ -41,6 +45,7 @@ class Task {
         'title': title,
         'completed': completed ?? false,
         'note': note ?? '',
+        'reminder': reminder,
         'dueDate': dueDate,
         'createdBy': createdBy
       };

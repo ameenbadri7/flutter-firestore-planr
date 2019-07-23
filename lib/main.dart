@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'models/project.dart';
@@ -20,7 +21,16 @@ Map<int, Color> color = {
   900: Color.fromRGBO(136, 14, 79, 1),
 };
 
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
 void main() {
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var initializationSettingsAndroid =
+      new AndroidInitializationSettings('app_icon');
+  var initializationSettingsIOS = IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(
+      initializationSettingsAndroid, initializationSettingsIOS);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0XFF1E1E41), //top bar color
@@ -37,6 +47,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider<FlutterLocalNotificationsPlugin>.value(
+            value: flutterLocalNotificationsPlugin),
         StreamProvider<List<Project>>.value(
           value: db.getProjectsStream(),
         ),

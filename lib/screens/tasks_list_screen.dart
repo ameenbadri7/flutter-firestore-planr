@@ -65,9 +65,13 @@ class TaskListScreen extends StatelessWidget {
                         },
                       ),
                       CategorizedTaskList(),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: CreateTaskButton(projectId: projectId),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(bottom: screenSize.width * 0.1),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: CreateTaskButton(projectId: projectId),
+                        ),
                       )
                     ],
                   ),

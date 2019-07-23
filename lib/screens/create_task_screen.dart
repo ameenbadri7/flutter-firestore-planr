@@ -2,8 +2,11 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_moment/simple_moment.dart';
 
+import './note_details_screen.dart';
 import '../components/editable_text_field.dart';
 import '../models/task.dart';
 import '../services/database.dart';
@@ -25,21 +28,33 @@ class CreateTaskScreen extends StatefulWidget {
 class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final Database db = Database();
   String title = '';
+  DateTime reminder;
   DateTime dueDate;
   String note = '';
 
   @override
   void dispose() {
     if (title.isNotEmpty) {
-      print('adding');
-      db.addTask(
-          widget.projectId, Task(title: title, dueDate: dueDate, note: note));
+      db.addTask(widget.projectId,
+          Task(title: title, reminder: reminder, dueDate: dueDate, note: note));
     }
     super.dispose();
   }
 
+  void openNoteDetailScreen() async {
+    note =
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return NoteDetailScreen(
+        title: title,
+        note: note,
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        Provider.of<FlutterLocalNotificationsPlugin>(context);
     return SingleChildScrollView(
       child: Container(
 //      height: 500,
@@ -60,9 +75,45 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               },
               style: Theme.of(context).textTheme.title,
             ),
-            ListTile(
-              leading: Icon(Icons.alarm),
-              title: Text('Remind me'),
+            InkWell(
+              onTap: () {
+                DatePicker.showDatePicker(
+                  context,
+                  currentTime: reminder,
+                  theme: DatePickerTheme(
+                    doneStyle: TextStyle(color: Theme.of(context).primaryColor),
+                  ),
+                  onConfirm: (DateTime selectedDate) async {
+                    setState(() {
+                      reminder = selectedDate;
+                    });
+                    // TODO: Fix Android Reminders
+                    var scheduledNotificationDateTime = reminder;
+                    var androidPlatformChannelSpecifics =
+                        AndroidNotificationDetails(
+                            'your other channel id',
+                            'your other channel name',
+                            'your other channel description');
+                    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+                    NotificationDetails platformChannelSpecifics =
+                        NotificationDetails(androidPlatformChannelSpecifics,
+                            iOSPlatformChannelSpecifics);
+                    await flutterLocalNotificationsPlugin.schedule(
+                        0,
+                        '$title',
+                        'Lets get to working',
+                        scheduledNotificationDateTime,
+                        platformChannelSpecifics,
+                        androidAllowWhileIdle: true);
+                  },
+                );
+              },
+              child: ListTile(
+                leading: Icon(Icons.alarm),
+                title: Text(reminder != null
+                    ? '${Moment.now().from(reminder)}'
+                    : 'Remind me'),
+              ),
             ),
             Divider(),
             InkWell(
@@ -114,16 +165,14 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
             Visibility(
               visible: note.isNotEmpty,
               child: Text(
-                'This is the note, am just here for show',
+                '$note',
                 style: Theme.of(context).textTheme.body1,
               ),
             ),
             Visibility(
               visible: note.isEmpty,
               child: InkWell(
-                onTap: () {
-                  // TODO: Go to Notes Screen
-                },
+                onTap: openNoteDetailScreen,
                 child: Container(
                   width: double.infinity,
                   child: DottedBorder(
